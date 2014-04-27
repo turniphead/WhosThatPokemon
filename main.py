@@ -4,7 +4,8 @@ CIS 192 Final Project: Pokemon Quiz
 
 import wx
 import math
-class Calculator(wx.Frame):
+import time
+class WhosThatPokemon(wx.Frame):
 
     def __init__(self, *args, **keywords):
 
@@ -12,13 +13,12 @@ class Calculator(wx.Frame):
         
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
         self.SetSizer(sizer)
-        self.png = wx.StaticBitmap(self, -1, wx.Bitmap("3.gif", wx.BITMAP_TYPE_ANY))
+        self.png = wx.StaticBitmap(self, -1, wx.Bitmap("pik.jpg", wx.BITMAP_TYPE_ANY))
         self.GetSizer().Add(item=self.png, proportion=1) 
-        self.history = {}
-        self.instruction = 0
-
+        self.score = 0
+        self.time = time.clock()
         self.CreateTextCtrl()
-        self.CreateUndoRedo()
+        self.CreateMenuButtons()
         sizer.Fit(self)
   
     
@@ -30,39 +30,30 @@ class Calculator(wx.Frame):
 
     def Enter(self, event):
         b = event.GetEventObject().GetLabel()
-        self.history[self.instruction] = self.text.GetValue()
-        self.instruction += 1
-        if b == wx.WXK_RETURN:
-            self.text.Clear()
-        else:
-            self.text.AppendText(b)
 
-    def CreateUndoRedo(self):
+    def CreateMenuButtons(self):
         gs = wx.GridSizer(1,2)
-        undo = wx.Button(parent=self, label='Undo')
-        redo = wx.Button(parent=self, label='Redo')
+        quit = wx.Button(parent=self, label='Quit')
+        restart = wx.Button(parent=self, label='Time: ' + str(self.time))
 
-        gs.Add(item=undo, flag=wx.EXPAND)
-        gs.Add(item=redo, flag=wx.EXPAND)
+        gs.Add(item=quit, flag=wx.EXPAND)
+        gs.Add(item=restart, flag=wx.EXPAND)
 
-        self.Bind(event=wx.EVT_BUTTON, handler=self.Undo, source=undo)
-        self.Bind(event=wx.EVT_BUTTON, handler=self.Redo, source=redo)
+        self.Bind(event=wx.EVT_BUTTON, handler=self.Quit, source=quit)
+        self.Bind(event=wx.EVT_BUTTON, handler=self.Restart, source=restart)
 
         self.GetSizer().Add(item=gs, flag=wx.EXPAND)
     
-    def Undo(self, event):
-        if self.instruction > 0:
-            self.instruction -= 1
-            self.text.ChangeValue(self.history[self.instruction]) 
-
-    def Redo(self, event):
-        if self.instruction < (len(self.history) - 1):
-            self.instruction += 1
-            self.text.ChangeValue(self.history[self.instruction])        
+    def Quit(self, event):
+        wx.GetApp().ExitMainLoop()
+    def Restart(self, event):
+        self.score = 0
+        self.time = 0
+        
 
 def main():
     app = wx.App()
-    frame = Calculator(parent=None, id=wx.ID_ANY, title='Who Is That Pokemon?')
+    frame = WhosThatPokemon(parent=None, id=wx.ID_ANY, title='Who Is That Pokemon?')
     frame.Show(True)
     app.MainLoop()
 
