@@ -17,6 +17,7 @@ class WhosThatPokemon(wx.Frame):
         self.GetSizer().Add(item=self.png, proportion=1) 
         self.score = 0
         self.time = 0
+        self.pause = False
         self.Timer = wx.Timer(self)
         self.Timer.Start(1000)
         self.CreateTextCtrl()
@@ -32,7 +33,7 @@ class WhosThatPokemon(wx.Frame):
 
     def Enter(self, event):
         key = event.GetEventObject().GetValue()
-        print key
+        
     def CreateMenuButtons(self):
         gs = wx.GridSizer(1,2)
         quit = wx.Button(parent=self, label='Quit')
@@ -43,15 +44,20 @@ class WhosThatPokemon(wx.Frame):
 
         self.Bind(event=wx.EVT_BUTTON, handler=self.Quit, source=quit)
         self.Bind(wx.EVT_TIMER, self.update_timer, self.Timer)
+        self.Bind(event=wx.EVT_BUTTON, handler=self.Pause, source=self.timer_button)
+
 
         self.GetSizer().Add(item=gs, flag=wx.EXPAND)
     
     def Quit(self, event):
         self.Destroy()    
+
     def update_timer(self, event):
-        self.time += 1
-        self.timer_button.SetLabel("Time: " + str(self.time))
-                
+        if(self.pause == False):
+            self.time += 1
+            self.timer_button.SetLabel("Time: " + str(self.time))
+    def Pause(self, event):
+        self.pause = not (self.pause)        
              
 
 def main():
