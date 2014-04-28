@@ -27,15 +27,12 @@ class WhosThatPokemon(wx.Frame):
     def CreateTextCtrl(self):
         text = wx.TextCtrl(self)
         self.GetSizer().Add(item=text, flag=wx.EXPAND)
-        self.Bind(event=wx.EVT_KEY_DOWN, handler=self.Enter, source=text)
+        self.Bind(event=wx.EVT_TEXT, handler=self.Enter, source=text)
         self.text = text   
 
     def Enter(self, event):
-        #b = event.GetEventObject().GetLabel()
-        #key = event.GetKeyCode()
-        #if key == wx.WXK_RETURN:
-        print 'lol'
-
+        key = event.GetEventObject().GetValue()
+        if(key == 
     def CreateMenuButtons(self):
         gs = wx.GridSizer(1,2)
         quit = wx.Button(parent=self, label='Quit')
