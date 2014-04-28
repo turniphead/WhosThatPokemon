@@ -4,7 +4,6 @@ CIS 192 Final Project: Pokemon Quiz
 
 import wx
 import math
-import time
 class WhosThatPokemon(wx.Frame):
 
     def __init__(self, *args, **keywords):
@@ -16,7 +15,7 @@ class WhosThatPokemon(wx.Frame):
         self.png = wx.StaticBitmap(self, -1, wx.Bitmap("pik.jpg", wx.BITMAP_TYPE_ANY))
         self.GetSizer().Add(item=self.png, proportion=1) 
         self.score = 0
-        self.time = time.clock()
+        self.time = wx.Timer()
         self.CreateTextCtrl()
         self.CreateMenuButtons()
         sizer.Fit(self)
@@ -30,23 +29,24 @@ class WhosThatPokemon(wx.Frame):
 
     def Enter(self, event):
         b = event.GetEventObject().GetLabel()
+        print "LOL"
 
     def CreateMenuButtons(self):
         gs = wx.GridSizer(1,2)
         quit = wx.Button(parent=self, label='Quit')
-        restart = wx.Button(parent=self, label='Time: ' + str(self.time))
+        timer = wx.Button(parent=self, label='Time: ' + str(self.time))
 
         gs.Add(item=quit, flag=wx.EXPAND)
-        gs.Add(item=restart, flag=wx.EXPAND)
+        gs.Add(item=timer, flag=wx.EXPAND)
 
         self.Bind(event=wx.EVT_BUTTON, handler=self.Quit, source=quit)
-        self.Bind(event=wx.EVT_BUTTON, handler=self.Restart, source=restart)
+        self.Bind(event=wx.EVT_BUTTON, handler=self.Timer, source=timer)
 
         self.GetSizer().Add(item=gs, flag=wx.EXPAND)
     
     def Quit(self, event):
         wx.GetApp().ExitMainLoop()
-    def Restart(self, event):
+    def Timer(self, event):
         self.score = 0
         self.time = 0
         
