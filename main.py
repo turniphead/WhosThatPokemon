@@ -5,8 +5,9 @@ CIS 192 Final Project: Pokemon Quiz
 import wx
 import math
 import time
-class WhosThatPokemon(wx.Frame):
 
+class WhosThatPokemon(wx.Frame):
+    
     def __init__(self, *args, **keywords):
 
         wx.Frame.__init__(self, *args, **keywords)
@@ -24,6 +25,17 @@ class WhosThatPokemon(wx.Frame):
         self.CreateTextCtrl()
         self.CreateMenuButtons()
         sizer.Fit(self)
+
+        self.num2name = {}
+        self.num2color = {}
+        self.num2black = {}
+        f = open('Pokemon names.txt','r')
+        for line in f.read().splitlines():
+            split = line.split('-')
+            self.num2name[split[0]] = split[1]
+            self.num2color[split[0]] = split[0]+'-'+split[1]+'.png'
+            self.num2black[split[0]] = split[0]+'-'+split[1]+'-s.png'
+        f.close()
   
     
     def CreateTextCtrl(self):
