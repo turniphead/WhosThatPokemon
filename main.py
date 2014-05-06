@@ -5,37 +5,48 @@ CIS 192 Final Project: Pokemon Quiz
 import wx
 import math
 import time
+import random
 
 class WhosThatPokemon(wx.Frame):
     
     def __init__(self, *args, **keywords):
 
         wx.Frame.__init__(self, *args, **keywords)
-        
-        sizer = wx.BoxSizer(orient=wx.VERTICAL)
-        self.SetSizer(sizer)
-        self.png = wx.StaticBitmap(self, -1, wx.Bitmap("pik.jpg", wx.BITMAP_TYPE_ANY))
-        self.GetSizer().Add(item=self.png, proportion=1) 
-        self.score = 0
-        self.time = 0
-        self.points = 10
-        self.pause = False
-        self.Timer = wx.Timer(self)
-        self.Timer.Start(1000)
-        self.CreateTextCtrl()
-        self.CreateMenuButtons()
-        sizer.Fit(self)
-
+    
+        #Create pointers to pokemon pics
         self.num2name = {}
         self.num2color = {}
         self.num2black = {}
         f = open('Pokemon names.txt','r')
         for line in f.read().splitlines():
             split = line.split('-')
-            self.num2name[split[0]] = split[1]
-            self.num2color[split[0]] = split[0]+'-'+split[1]+'.png'
-            self.num2black[split[0]] = split[0]+'-'+split[1]+'-s.png'
+            self.num2name[int(split[0])] = split[1]
+            self.num2color[int(split[0])] = line+'.png'
+            self.num2black[int(split[0])] = line+'-s.png'
         f.close()
+
+        self.curr = random.randint(1,151)
+        #Initialize game values
+        self.score = 0
+        self.time = 0
+        self.points = 10
+        self.pause = False
+
+        #Choose and draw first picture
+        sizer = wx.BoxSizer(orient=wx.VERTICAL)
+        self.SetSizer(sizer)
+        self.png = wx.StaticBitmap(self, -1, wx.Bitmap('color/' + self.num2color[self.curr], wx.BITMAP_TYPE_ANY))
+        self.GetSizer().Add(item=self.png, proportion=1) 
+        
+        #Create timer, start
+        self.Timer = wx.Timer(self)
+        self.Timer.Start(1000)
+
+        #Call necessary interface methods
+        self.CreateTextCtrl()
+        self.CreateMenuButtons()
+        sizer.Fit(self)
+
   
     
     def CreateTextCtrl(self):
