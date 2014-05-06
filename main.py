@@ -57,10 +57,18 @@ class WhosThatPokemon(wx.Frame):
 
     def Enter(self, event):
         key = event.GetEventObject().GetValue()
-        if(key == 'Pikachu' and not self.pause):
+        if(self.points == 0.0):
+            self.NextPokemon()
+        if(key == self.num2name[self.curr] and not self.pause):
             self.score += self.points
             self.score_button.SetLabel("Score: " + str(self.score))
+            self.NextPokemon()
+    
+    def NextPokemon(self):
             self.points = 10
+            self.curr = random.randint(1,151)
+            self.png.SetBitmap(wx.Bitmap('color/' + self.num2color[self.curr]))
+            self.text.Clear()
 
 
     def CreateMenuButtons(self):
@@ -98,6 +106,8 @@ class WhosThatPokemon(wx.Frame):
                 self.points -= 0.5
         self.timer_button.SetLabel("Time: " + str(self.time))
         self.points_button.SetLabel("Points: " + str(self.points))
+        if(self.points == 0): 
+            self.NextPokemon()
         
     def Pause(self, event):
         self.pause = not (self.pause)    
