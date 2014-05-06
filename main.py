@@ -35,7 +35,7 @@ class WhosThatPokemon(wx.Frame):
         #Choose and draw first picture
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
         self.SetSizer(sizer)
-        self.png = wx.StaticBitmap(self, -1, wx.Bitmap('color/' + self.num2color[self.curr], wx.BITMAP_TYPE_ANY))
+        self.png = wx.StaticBitmap(self, -1, wx.Bitmap('color/' + self.num2color[self.curr], wx.BITMAP_TYPE_PNG))
         self.GetSizer().Add(item=self.png, proportion=1) 
         
         #Create timer, start
