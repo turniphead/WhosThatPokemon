@@ -62,7 +62,7 @@ class WhosThatPokemon(wx.Frame):
         key = event.GetEventObject().GetValue()
         if(self.points == 0.0):
             self.NextPokemon()
-        if(key == self.num2name[self.curr] and not self.pause):
+        if(key.lower() == self.num2name[self.curr].lower() and not self.pause):
             self.score += self.points
             self.score_button.SetLabel("Score: " + str(self.score))
             self.NextPokemon()
