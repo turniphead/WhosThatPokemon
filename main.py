@@ -50,7 +50,7 @@ class WhosThatPokemon(wx.Frame):
     def playFile(self,event):
         pygame.mixer.init()
         pygame.mixer.music.load('Music/poke.wav')
-        pygame.mixer.music.play()
+        pygame.mixer.music.play(loops=-1)
 
     def CreateTextCtrl(self):
         text = wx.TextCtrl(self)
