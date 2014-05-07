@@ -6,6 +6,7 @@ import wx
 import math
 import time
 import random
+from background_panel import *
 
 class WhosThatPokemon(wx.Frame):
     
@@ -31,6 +32,9 @@ class WhosThatPokemon(wx.Frame):
         self.time = 0
         self.points = 10
         self.pause = False
+
+        #create background image
+        #panel = background_panel(self)
 
         #Choose and draw first picture
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
