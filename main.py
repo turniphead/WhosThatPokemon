@@ -212,18 +212,21 @@ class WhosThatPokemon(wx.Frame):
     # timer event, called once per second
     def update_timer(self, event):
         if(self.pause == False):
-            self.time += 1
+
             # updates hint if true and if it's been two seconds
             if (self.hint and self.curr >= 0):
                 t = self.time-self.hint_time
                 if ( t % 2 == 0 and \
-                    t / 2 < len(self.num2name[self.curr])+1):
+                    t / 2 < len(self.num2name[self.curr])):
                     self.hint_text.SetEditable(True)
-                    self.hint_text.AppendText(self.num2name[self.curr][t/2-1])
+                    self.hint_text.AppendText(self.num2name[self.curr][t/2])
                     self.hint_text.SetEditable(False)
+
+            self.time += 1
 
             if (self.points > 0):
                 self.points -= 0.5
+
         self.timer_button.SetLabel("Time: " + str(self.time))
         self.points_button.SetLabel("Points This Round: " + str(self.points))
         if(self.points == 0): 

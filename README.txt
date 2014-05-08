@@ -1,8 +1,7 @@
 Requires pygame, so follow instructions @ 
 http://coding2learn.org/blog/2014/03/11/installing-pygame-on-mac-os-x-with-python-3/
 
-#todo
-hint textbox
+
 
 #done
 music button
@@ -27,3 +26,7 @@ next button
 unclickable button method
 	returns focus to textbox, when clicking a button that does nothing. 
 	now all buttons return focus to textbox
+hint button
+	when activated, shows hint textbox that slowly fills in the name of the pokemon in the hint area
+	when deactivated, hides the hint textbox from view
+	hint area resets to hidden after each pokemon
