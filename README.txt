@@ -30,3 +30,8 @@ hint button
 	when activated, shows hint textbox that slowly fills in the name of the pokemon in the hint area
 	when deactivated, hides the hint textbox from view
 	hint area resets to hidden after each pokemon
+intro sound
+	plays the classic "Who's That Pokemon?!" sound clip
+	classic
+Popup instructions
+	made a popup with instructions before the game begins

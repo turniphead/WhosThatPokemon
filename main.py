@@ -22,6 +22,11 @@ class WhosThatPokemon(wx.Frame):
             wx.OK | wx.ICON_INFORMATION)
 
         only_one_pokemon = False
+
+        pygame.mixer.init()
+        pygame.mixer.music.load('Music/poke-who.wav')
+        pygame.mixer.music.play()
+
     
         #Create pointers to pokemon pics
         self.num2name = {}
@@ -152,7 +157,6 @@ class WhosThatPokemon(wx.Frame):
                 self.music = "playing"
                 self.music_button.SetLabel("Pause Music")
             elif (self.music == "off"):
-                pygame.mixer.init()
                 pygame.mixer.music.load('Music/poke.wav')
                 pygame.mixer.music.play(loops=-1)
                 self.music = "playing"

@@ -1,1 +1,11 @@
-This is a cool Pokemon game, you should play it!
+Who's That Pokemon?!
+
+Remember when you'd be watching pokemon, and right before the commercials you were asked to guess the identity of a silhouetted Pokemon? Well now you can do it to your hearts content!
+
+In this game, the object is to correctly type the name of the pokemon on the screen, as fast as you can! You get more points for completing it quickly.
+
+Do you have what it takes to guess them all?
+
+
+Made by Christopher Akatsuka and Dean Wilhelmi
+May, 2014
