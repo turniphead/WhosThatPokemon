@@ -131,7 +131,7 @@ class WhosThatPokemon(wx.Frame):
         gs = wx.GridSizer(4,2)
 
         self.timer_button = wx.Button(parent=self, label='Time: ' + str(self.time))
-        pause = wx.Button(parent=self, label='Pause')
+        self.pause_button = wx.Button(parent=self, label='Pause')
         self.score_button = wx.Button(parent=self, label='Score: ' + str(self.score))
         self.points_button = wx.Button(parent=self, label='Points: ' + str(self.points))
         quit = wx.Button(parent=self, label='Quit')
@@ -140,7 +140,7 @@ class WhosThatPokemon(wx.Frame):
         self.easy_button = wx.Button(parent=self,label="Easy Mode: OFF")
 
         gs.Add(item=self.timer_button, flag=wx.EXPAND)
-        gs.Add(item=pause, flag=wx.EXPAND)
+        gs.Add(item=self.pause_button, flag=wx.EXPAND)
         gs.Add(item=self.score_button, flag=wx.EXPAND)
         gs.Add(item=self.points_button, flag=wx.EXPAND)
         gs.Add(item=quit, flag=wx.EXPAND)
@@ -149,7 +149,7 @@ class WhosThatPokemon(wx.Frame):
         gs.Add(item=self.easy_button, flag=wx.EXPAND)
         
         self.Bind(wx.EVT_TIMER, self.update_timer, self.Timer)
-        self.Bind(event=wx.EVT_BUTTON, handler=self.Pause, source=pause)
+        self.Bind(event=wx.EVT_BUTTON, handler=self.Pause, source=self.pause_button)
         self.Bind(event=wx.EVT_BUTTON, handler=self.Restart, source=restart)
         self.Bind(event=wx.EVT_BUTTON, handler=self.Quit, source=quit)
         self.Bind(event=wx.EVT_BUTTON, handler=self.playFile, source=self.music_button)
@@ -192,6 +192,13 @@ class WhosThatPokemon(wx.Frame):
     def Pause(self, event):
         self.pause = not (self.pause)
 
+        if self.pause:
+            self.pause_button.SetLabel("Unpause")
+            self.text.SetEditable(False)
+        else:
+            self.pause_button.SetLabel("Pause")
+            self.text.SetEditable(True)
+
         if(self.music != "off"):
             # pause music if you pause the game
             if(self.pause and self.music=="playing"):
@@ -227,6 +234,8 @@ class WhosThatPokemon(wx.Frame):
         self.points_button.SetLabel("Points: " + str(self.points))
         self.score_button.SetLabel("Score: " + str(self.score))
         self.timer_button.SetLabel("Time: " + str(self.time))
+
+        self.text.SetEditable(True)
         self.text.SetFocus()
 
 
