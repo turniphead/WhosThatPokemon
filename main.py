@@ -14,7 +14,7 @@ class WhosThatPokemon(wx.Frame):
 
         wx.Frame.__init__(self, *args, **keywords)
 
-        only_one_pokemon = True
+        only_one_pokemon = False
     
         #Create pointers to pokemon pics
         self.num2name = {}
@@ -62,6 +62,8 @@ class WhosThatPokemon(wx.Frame):
 
         # Make hidden textbox for hint
         self.hint_text = wx.TextCtrl(self)
+        self.hint_text.SetEditable(False)
+        self.hint_text.WriteText("Hint: ")
         self.GetSizer().Add(item=self.hint_text, flag=wx.EXPAND)
         self.GetSizer().Hide(self.hint_text)
 
@@ -158,6 +160,9 @@ class WhosThatPokemon(wx.Frame):
                 del self.num2color[self.curr]
                 del self.num2black[self.curr]
 
+            if(self.hint):
+                self.ShowHideHint()
+
             keys_left = self.num2color.keys()
             if (len(keys_left) == 0):
                 self.curr = -2
@@ -179,6 +184,8 @@ class WhosThatPokemon(wx.Frame):
             self.points = 10
             self.points_button.SetLabel("Points This Round: " + str(self.points))
             self.back_panel.Refresh()
+
+            
             self.text.Clear()
             self.text.SetFocus()
 
@@ -206,6 +213,15 @@ class WhosThatPokemon(wx.Frame):
     def update_timer(self, event):
         if(self.pause == False):
             self.time += 1
+            # updates hint if true and if it's been two seconds
+            if (self.hint and self.curr >= 0):
+                t = self.time-self.hint_time
+                if ( t % 2 == 0 and \
+                    t / 2 < len(self.num2name[self.curr])+1):
+                    self.hint_text.SetEditable(True)
+                    self.hint_text.AppendText(self.num2name[self.curr][t/2-1])
+                    self.hint_text.SetEditable(False)
+
             if (self.points > 0):
                 self.points -= 0.5
         self.timer_button.SetLabel("Time: " + str(self.time))
@@ -263,18 +279,22 @@ class WhosThatPokemon(wx.Frame):
         self.text.SetEditable(True)
         self.text.SetFocus()
 
-    def ShowHideHint(self, event):
+    def ShowHideHint(self, event=[]):
         self.hint = not self.hint
 
         if (self.hint):
             self.hint_button.SetLabel("Hide Hint")
+            self.hint_text.Clear()
+            self.hint_text.WriteText("Hint: ")
             self.GetSizer().Show(self.hint_text)
             self.GetSizer().Fit(self)
+
+            self.hint_time = self.time
         else:
             self.hint_button.SetLabel("Show Hint")
             self.GetSizer().Hide(self.hint_text)
             self.GetSizer().Fit(self)
-        
+
         self.text.SetFocus()
 
 
