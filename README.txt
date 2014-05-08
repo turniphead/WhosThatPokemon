@@ -3,7 +3,7 @@ http://coding2learn.org/blog/2014/03/11/installing-pygame-on-mac-os-x-with-pytho
 
 
 
-#done
+#done by Dean:
 music button
 	plays / pauses music
 	alternating effect of button label

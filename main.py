@@ -14,6 +14,13 @@ class WhosThatPokemon(wx.Frame):
 
         wx.Frame.__init__(self, *args, **keywords)
 
+
+        fi = open('instructions.txt','r')
+        instr = fi.read()
+        fi.close()
+        wx.MessageBox(instr, 'Instructions', 
+            wx.OK | wx.ICON_INFORMATION)
+
         only_one_pokemon = False
     
         #Create pointers to pokemon pics
@@ -165,6 +172,7 @@ class WhosThatPokemon(wx.Frame):
 
             keys_left = self.num2color.keys()
             if (len(keys_left) == 0):
+                self.Pause()
                 self.curr = -2
                 self.back_panel.back = wx.Bitmap('end.jpg')
                 self.back_panel.poke = wx.Bitmap('transparent.png')
@@ -172,6 +180,8 @@ class WhosThatPokemon(wx.Frame):
                 self.text.Clear()
                 self.text.AppendText('Congratulations, you win!')
                 self.text.SetEditable(False)
+                self.points = 10
+                self.points_button.SetLabel("Points This Round: " + str(self.points))
                 return
 
             self.curr = keys_left[ random.randint(0,len(keys_left)-1) ]
@@ -233,7 +243,7 @@ class WhosThatPokemon(wx.Frame):
             self.NextPokemon()
         
     # pause button method
-    def Pause(self, event):
+    def Pause(self, event=[]):
         self.pause = not (self.pause)
 
         if self.pause:
@@ -269,9 +279,22 @@ class WhosThatPokemon(wx.Frame):
             self.num2black[int(split[0])] = line+'-s.png'
         f.close()
 
-        # tells next pokemon to not delete the current pokemon from the set
-        self.curr = -1
-        self.NextPokemon()
+        self.curr = random.randint(1,151)
+
+        no_log = wx.LogNull()
+        self.back_panel.back = wx.Bitmap("background_img.png")
+        if(self.easy):
+            self.back_panel.poke = wx.Bitmap('color/' + self.num2color[self.curr])
+        else:
+            self.back_panel.poke = wx.Bitmap('black/' + self.num2black[self.curr])
+        self.back_panel.Refresh()
+        del no_log
+
+        if (self.pause):
+            self.Pause()
+
+        if (self.hint):
+            self.ShowHideHint()
 
         self.time = 0
         self.score = 0
@@ -279,6 +302,7 @@ class WhosThatPokemon(wx.Frame):
         self.score_button.SetLabel("Score: " + str(self.score))
         self.timer_button.SetLabel("Time: " + str(self.time))
 
+        self.text.Clear()
         self.text.SetEditable(True)
         self.text.SetFocus()
 
@@ -305,7 +329,9 @@ def main():
     app = wx.App()
     frame = WhosThatPokemon(parent=None, id=wx.ID_ANY, title='Who Is That Pokemon?')
     frame.Show(True)
+    frame.Center()
     frame.SetFocus()
+    frame.text.SetFocus()
     app.MainLoop()
 
 
