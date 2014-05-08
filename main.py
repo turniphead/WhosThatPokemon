@@ -33,11 +33,12 @@ class WhosThatPokemon(wx.Frame):
         self.points = 10
         self.pause = False
         self.music = "off" # has 4 values: off, playing, paused, paused_duetogame
+        self.easy = False
 
 
         #create background image and first pokemon, without returning error
         no_log = wx.LogNull()
-        self.back_panel = BackPanel(self,'color/' + self.num2color[self.curr])
+        self.back_panel = BackPanel(self,'black/' + self.num2black[self.curr])
         del no_log
 
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
@@ -90,9 +91,19 @@ class WhosThatPokemon(wx.Frame):
     
     # pokemon picture change method
     def NextPokemon(self):
+            # delete the current pokemon from both sets of pokemon
+            del self.num2color[self.curr]
+            del self.num2black[self.curr]
+
+            keys_left = self.num2color.keys()
+            self.curr = keys_left[ random.randint(0,len(keys_left)-1) ]
+
+            if(self.easy):
+                self.back_panel.poke = wx.Bitmap('color/' + self.num2color[self.curr])
+            else:
+                self.back_panel.poke = wx.Bitmap('black/' + self.num2black[self.curr])
+
             self.points = 10
-            self.curr = random.randint(1,151)
-            self.back_panel.poke = wx.Bitmap('color/' + self.num2color[self.curr])
             self.back_panel.Refresh()
             self.text.Clear()
 
@@ -107,6 +118,7 @@ class WhosThatPokemon(wx.Frame):
         quit = wx.Button(parent=self, label='Quit')
         restart = wx.Button(parent=self, label='Restart')
         self.music_button = wx.Button(parent=self,label="Play Music")
+        self.easy_button = wx.Button(parent=self,label="Easy Mode: OFF")
 
         gs.Add(item=self.timer_button, flag=wx.EXPAND)
         gs.Add(item=pause, flag=wx.EXPAND)
@@ -115,14 +127,29 @@ class WhosThatPokemon(wx.Frame):
         gs.Add(item=quit, flag=wx.EXPAND)
         gs.Add(item=restart, flag=wx.EXPAND)
         gs.Add(item=self.music_button, flag=wx.EXPAND)
+        gs.Add(item=self.easy_button, flag=wx.EXPAND)
         
         self.Bind(wx.EVT_TIMER, self.update_timer, self.Timer)
         self.Bind(event=wx.EVT_BUTTON, handler=self.Pause, source=pause)
         self.Bind(event=wx.EVT_BUTTON, handler=self.Restart, source=restart)
         self.Bind(event=wx.EVT_BUTTON, handler=self.Quit, source=quit)
         self.Bind(event=wx.EVT_BUTTON, handler=self.playFile, source=self.music_button)
+        self.Bind(event=wx.EVT_BUTTON, handler=self.change_difficulty, source=self.easy_button)
 
         self.GetSizer().Add(item=gs, flag=wx.EXPAND)
+
+    # called when the easy button is pressed. changes difficulty
+    def change_difficulty(self, event):
+        self.easy = not self.easy
+        if (self.easy):
+            self.easy_button.SetLabel('Easy Mode: ON')
+            self.back_panel.poke = wx.Bitmap('color/' + self.num2color[self.curr])
+        else:
+            self.easy_button.SetLabel('Easy Mode: OFF')
+            self.back_panel.poke = wx.Bitmap('black/' + self.num2black[self.curr])
+        self.back_panel.Refresh()
+        
+
 
     # quit button method
     def Quit(self, event):
