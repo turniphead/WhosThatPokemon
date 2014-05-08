@@ -7,7 +7,6 @@ import math
 import time
 import random
 from background_panel import *
-from background_panel2 import *
 
 class WhosThatPokemon(wx.Frame):
     
@@ -37,7 +36,7 @@ class WhosThatPokemon(wx.Frame):
         #create background image
         no_log = wx.LogNull()
         #back_panel = BackPanel(self,-1)
-        self.back_panel = BackPanel2(self,'color/' + self.num2color[self.curr])
+        self.back_panel = BackPanel(self,'color/' + self.num2color[self.curr])
         del no_log
 
 
