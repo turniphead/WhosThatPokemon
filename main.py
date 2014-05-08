@@ -13,6 +13,8 @@ class WhosThatPokemon(wx.Frame):
     def __init__(self, *args, **keywords):
 
         wx.Frame.__init__(self, *args, **keywords)
+
+        only_one_pokemon = False
     
         #Create pointers to pokemon pics
         self.num2name = {}
@@ -22,11 +24,15 @@ class WhosThatPokemon(wx.Frame):
         for line in f.read().splitlines():
             split = line.split('-')
             self.num2name[int(split[0])] = split[1]
-            self.num2color[int(split[0])] = line+'.png'
-            self.num2black[int(split[0])] = line+'-s.png'
+            if (not only_one_pokemon or (int(split[0]) == 1) ):
+                self.num2color[int(split[0])] = line+'.png'
+                self.num2black[int(split[0])] = line+'-s.png'
         f.close()
 
-        self.curr = random.randint(1,151)
+        self.curr = random.randint(1,151)  #sometimes -1 or -2
+
+        if (only_one_pokemon):
+            self.curr = 1
         #Initialize game values
         self.score = 0
         self.time = 0
@@ -53,6 +59,7 @@ class WhosThatPokemon(wx.Frame):
         self.CreateTextCtrl()
         self.CreateMenuButtons()
         sizer.Fit(self)
+        self.text.SetFocus()
         
     # music button method
     def playFile(self,event):
@@ -82,20 +89,31 @@ class WhosThatPokemon(wx.Frame):
     # method called everytime textbox text is edited
     def Enter(self, event):
         key = event.GetEventObject().GetValue()
-        if(self.points == 0.0):
-            self.NextPokemon()
-        if(key.lower() == self.num2name[self.curr].lower() and not self.pause):
-            self.score += self.points
-            self.score_button.SetLabel("Score: " + str(self.score))
-            self.NextPokemon()
+        if (self.curr != -2):
+            if(self.points == 0.0):
+                self.NextPokemon()
+            if(key.lower() == self.num2name[self.curr].lower() and not self.pause):
+                self.score += self.points
+                self.score_button.SetLabel("Score: " + str(self.score))
+                self.NextPokemon()
     
     # pokemon picture change method
     def NextPokemon(self):
             # delete the current pokemon from both sets of pokemon
-            del self.num2color[self.curr]
-            del self.num2black[self.curr]
+            if (self.curr >= 0):
+                del self.num2color[self.curr]
+                del self.num2black[self.curr]
 
             keys_left = self.num2color.keys()
+            if (len(keys_left) == 0):
+                self.curr = -2
+                self.back_panel.poke = wx.Bitmap('end.jpg')
+                self.back_panel.Refresh()
+                self.text.Clear()
+                self.text.AppendText('Congratulations, you win!')
+                self.text.SetEditable(False)
+                return
+
             self.curr = keys_left[ random.randint(0,len(keys_left)-1) ]
 
             if(self.easy):
@@ -148,7 +166,7 @@ class WhosThatPokemon(wx.Frame):
             self.easy_button.SetLabel('Easy Mode: OFF')
             self.back_panel.poke = wx.Bitmap('black/' + self.num2black[self.curr])
         self.back_panel.Refresh()
-        
+
 
 
     # quit button method
@@ -172,6 +190,7 @@ class WhosThatPokemon(wx.Frame):
     # pause button method
     def Pause(self, event):
         self.pause = not (self.pause)
+
         if(self.music != "off"):
             # pause music if you pause the game
             if(self.pause and self.music=="playing"):
@@ -184,14 +203,30 @@ class WhosThatPokemon(wx.Frame):
                 self.music = "playing"
 
 
+
     def Restart(self, event):
+        # reset pokemon lists
+        self.num2name = {}
+        self.num2color = {}
+        self.num2black = {}
+        f = open('Names.txt','r')
+        for line in f.read().splitlines():
+            split = line.split('-')
+            self.num2name[int(split[0])] = split[1]
+            self.num2color[int(split[0])] = line+'.png'
+            self.num2black[int(split[0])] = line+'-s.png'
+        f.close()
+
+        # tells next pokemon to not delete the current pokemon from the set
+        self.curr = -1
+        self.NextPokemon()
+
         self.time = 0
         self.score = 0
-        self.NextPokemon()
         self.points_button.SetLabel("Points: " + str(self.points))
         self.score_button.SetLabel("Score: " + str(self.score))
         self.timer_button.SetLabel("Time: " + str(self.time))
-
+        self.text.SetFocus()
 
 
 
@@ -199,6 +234,7 @@ def main():
     app = wx.App()
     frame = WhosThatPokemon(parent=None, id=wx.ID_ANY, title='Who Is That Pokemon?')
     frame.Show(True)
+    frame.SetFocus()
     app.MainLoop()
 
 
