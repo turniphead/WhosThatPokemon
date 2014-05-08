@@ -34,13 +34,25 @@ class WhosThatPokemon(wx.Frame):
         self.pause = False
 
         #create background image
-        #panel = background_panel(self)
+        no_log = wx.LogNull()
+        back_panel = BackPanel(self,-1)
+        del no_log
 
-        #Choose and draw first picture
+
+
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
         self.SetSizer(sizer)
-        self.png = wx.StaticBitmap(self, -1, wx.Bitmap('color/' + self.num2color[self.curr], wx.BITMAP_TYPE_PNG))
-        self.GetSizer().Add(item=self.png, proportion=1) 
+        self.GetSizer().Add(item=back_panel)
+        #self.GetSizer().Add(item=self.png, proportion=1) 
+
+        #Choose and draw first picture
+        #dc = wx.ClientDC(back_panel.bitmap1)
+        #dc.SetBackgroundMode(wx.TRANSPARENT)
+        self.png = wx.StaticBitmap(back_panel.bitmap1, -1, wx.Bitmap('color/' + self.num2color[self.curr], wx.BITMAP_TYPE_PNG))
+        #self.png = wx.Bitmap('color/' + self.num2color[self.curr], wx.BITMAP_TYPE_PNG)
+        #dc.DrawBitmap(self.png, 0, 0)
+        
+        
         
         #Create timer, start
         self.Timer = wx.Timer(self)
