@@ -7,6 +7,7 @@ import math
 import time
 import random
 from background_panel import *
+from background_panel2 import *
 
 class WhosThatPokemon(wx.Frame):
     
@@ -35,20 +36,27 @@ class WhosThatPokemon(wx.Frame):
 
         #create background image
         no_log = wx.LogNull()
-        back_panel = BackPanel(self,-1)
+        #back_panel = BackPanel(self,-1)
+        self.back_panel = BackPanel2(self,'color/' + self.num2color[self.curr])
         del no_log
 
 
 
+        self.png = self.back_panel.poke;
+
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
         self.SetSizer(sizer)
-        self.GetSizer().Add(item=back_panel)
+
+        
+        self.GetSizer().Add(item=self.back_panel)
+
+
         #self.GetSizer().Add(item=self.png, proportion=1) 
 
         #Choose and draw first picture
         #dc = wx.ClientDC(back_panel.bitmap1)
         #dc.SetBackgroundMode(wx.TRANSPARENT)
-        self.png = wx.StaticBitmap(back_panel.bitmap1, -1, wx.Bitmap('color/' + self.num2color[self.curr], wx.BITMAP_TYPE_PNG))
+        #self.png = wx.StaticBitmap(back_panel.bitmap1, -1, wx.Bitmap('color/' + self.num2color[self.curr], wx.BITMAP_TYPE_PNG))
         #self.png = wx.Bitmap('color/' + self.num2color[self.curr], wx.BITMAP_TYPE_PNG)
         #dc.DrawBitmap(self.png, 0, 0)
         
@@ -86,7 +94,8 @@ class WhosThatPokemon(wx.Frame):
     def NextPokemon(self):
             self.points = 10
             self.curr = random.randint(1,151)
-            self.png.SetBitmap(wx.Bitmap('color/' + self.num2color[self.curr]))
+            self.back_panel.poke = wx.Bitmap('color/' + self.num2color[self.curr])
+            self.back_panel.Refresh()
             self.text.Clear()
 
 
