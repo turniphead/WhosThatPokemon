@@ -1,7 +1,11 @@
 Requires pygame, so follow instructions @ 
 http://coding2learn.org/blog/2014/03/11/installing-pygame-on-mac-os-x-with-python-3/
+
+
 create set that stores pokemon already answered
-infinite loop music, option to pause
 skip to next pokemon
 hint textbox
 
+
+#done:
+infinite loop music, option to pause

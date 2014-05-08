@@ -32,31 +32,17 @@ class WhosThatPokemon(wx.Frame):
         self.time = 0
         self.points = 10
         self.pause = False
-        self.music = "off" # has 3 values: off, playing, paused
+        self.music = "off" # has 4 values: off, playing, paused, paused_duetogame
 
 
-        #create background image without returning error
+        #create background image and first pokemon, without returning error
         no_log = wx.LogNull()
         self.back_panel = BackPanel(self,'color/' + self.num2color[self.curr])
         del no_log
 
-        self.png = self.back_panel.poke;
-
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
         self.SetSizer(sizer)
-
-        
         self.GetSizer().Add(item=self.back_panel)
-
-
-        #self.GetSizer().Add(item=self.png, proportion=1) 
-
-        #Choose and draw first picture
-
-        #self.png = wx.StaticBitmap(back_panel.bitmap1, -1, wx.Bitmap('color/' + self.num2color[self.curr], wx.BITMAP_TYPE_PNG))
-        #self.png = wx.Bitmap('color/' + self.num2color[self.curr], wx.BITMAP_TYPE_PNG)
-        
-        
         
         #Create timer, start
         self.Timer = wx.Timer(self)
@@ -67,28 +53,32 @@ class WhosThatPokemon(wx.Frame):
         self.CreateMenuButtons()
         sizer.Fit(self)
         
+    # music button method
     def playFile(self,event):
-        if (self.music == "playing"):
-            pygame.mixer.music.pause()
-            self.music = "paused"
-            self.music_button.SetLabel("Resume Music")
-        elif (self.music == "paused"):
-            pygame.mixer.music.unpause()
-            self.music = "playing"
-            self.music_button.SetLabel("Pause Music")
-        elif (self.music == "off"):
-            pygame.mixer.init()
-            pygame.mixer.music.load('Music/poke.wav')
-            pygame.mixer.music.play(loops=-1)
-            self.music = "playing"
-            self.music_button.SetLabel("Pause Music")
+        if (not self.pause):
+            if (self.music == "playing"):
+                pygame.mixer.music.pause()
+                self.music = "paused"
+                self.music_button.SetLabel("Resume Music")
+            elif (self.music == "paused"):
+                pygame.mixer.music.unpause()
+                self.music = "playing"
+                self.music_button.SetLabel("Pause Music")
+            elif (self.music == "off"):
+                pygame.mixer.init()
+                pygame.mixer.music.load('Music/poke.wav')
+                pygame.mixer.music.play(loops=-1)
+                self.music = "playing"
+                self.music_button.SetLabel("Pause Music")
 
+    # textbox method
     def CreateTextCtrl(self):
         text = wx.TextCtrl(self)
         self.GetSizer().Add(item=text, flag=wx.EXPAND)
         self.Bind(event=wx.EVT_TEXT, handler=self.Enter, source=text)
         self.text = text   
 
+    # method called everytime textbox text is edited
     def Enter(self, event):
         key = event.GetEventObject().GetValue()
         if(self.points == 0.0):
@@ -98,6 +88,7 @@ class WhosThatPokemon(wx.Frame):
             self.score_button.SetLabel("Score: " + str(self.score))
             self.NextPokemon()
     
+    # pokemon picture change method
     def NextPokemon(self):
             self.points = 10
             self.curr = random.randint(1,151)
@@ -105,7 +96,7 @@ class WhosThatPokemon(wx.Frame):
             self.back_panel.Refresh()
             self.text.Clear()
 
-
+    # initialize all buttons, called once at beginning of script
     def CreateMenuButtons(self):
         gs = wx.GridSizer(4,2)
 
@@ -133,13 +124,14 @@ class WhosThatPokemon(wx.Frame):
 
         self.GetSizer().Add(item=gs, flag=wx.EXPAND)
 
-    
+    # quit button method
     def Quit(self, event):
         if (self.music != "off"):
             pygame.mixer.music.stop()
         self.Destroy()
         return
 
+    # timer event, called once per second
     def update_timer(self, event):
         if(self.pause == False):
             self.time += 1
@@ -150,8 +142,20 @@ class WhosThatPokemon(wx.Frame):
         if(self.points == 0): 
             self.NextPokemon()
         
+    # pause button method
     def Pause(self, event):
         self.pause = not (self.pause)
+        if(self.music != "off"):
+            # pause music if you pause the game
+            if(self.pause and self.music=="playing"):
+                pygame.mixer.music.pause()
+                self.music = "paused_duetogame"
+            # start playing music when game unpauses, 
+            # but only if it was paused by the game in the first place
+            elif ( (not self.pause) and self.music == "paused_duetogame"):
+                pygame.mixer.music.unpause()
+                self.music = "playing"
+
 
     def Restart(self, event):
         self.time = 0
