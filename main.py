@@ -78,6 +78,7 @@ class WhosThatPokemon(wx.Frame):
                 pygame.mixer.music.play(loops=-1)
                 self.music = "playing"
                 self.music_button.SetLabel("Pause Music")
+        self.text.SetFocus()
 
     # textbox method
     def CreateTextCtrl(self):
@@ -166,7 +167,7 @@ class WhosThatPokemon(wx.Frame):
             self.easy_button.SetLabel('Easy Mode: OFF')
             self.back_panel.poke = wx.Bitmap('black/' + self.num2black[self.curr])
         self.back_panel.Refresh()
-
+        self.text.SetFocus()
 
 
     # quit button method
@@ -201,7 +202,7 @@ class WhosThatPokemon(wx.Frame):
             elif ( (not self.pause) and self.music == "paused_duetogame"):
                 pygame.mixer.music.unpause()
                 self.music = "playing"
-
+        self.text.SetFocus()
 
 
     def Restart(self, event):
