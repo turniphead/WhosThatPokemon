@@ -80,7 +80,7 @@
 80-Slowbro
 81-Magnemite
 82-Magneton
-83-Farfetch'd
+83-Farfetchd
 84-Doduo
 85-Dodrio
 86-Seel
@@ -119,7 +119,7 @@
 119-Seaking
 120-Staryu
 121-Starmie
-122-Mr. Mime
+122-MrMime
 123-Scyther
 124-Jynx
 125-Electabuzz
