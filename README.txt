@@ -2,10 +2,7 @@ Requires pygame, so follow instructions @
 http://coding2learn.org/blog/2014/03/11/installing-pygame-on-mac-os-x-with-python-3/
 
 #todo
-skip to next pokemon
 hint textbox
-
-
 
 #done
 music button
@@ -24,3 +21,9 @@ pokemon already answered
 end screen
 	made a screen when you name all pokemon that displays congratuations
 	textbox is uneditable until you restart the game
+next button
+	skip to next pokemon
+	return focus to textbox
+unclickable button method
+	returns focus to textbox, when clicking a button that does nothing. 
+	now all buttons return focus to textbox

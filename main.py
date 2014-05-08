@@ -14,7 +14,7 @@ class WhosThatPokemon(wx.Frame):
 
         wx.Frame.__init__(self, *args, **keywords)
 
-        only_one_pokemon = False
+        only_one_pokemon = True
     
         #Create pointers to pokemon pics
         self.num2name = {}
@@ -40,6 +40,7 @@ class WhosThatPokemon(wx.Frame):
         self.pause = False
         self.music = "off" # has 4 values: off, playing, paused, paused_duetogame
         self.easy = False
+        self.hint = False
 
 
         #create background image and first pokemon, without returning error
@@ -58,9 +59,22 @@ class WhosThatPokemon(wx.Frame):
         #Call necessary interface methods
         self.CreateTextCtrl()
         self.CreateMenuButtons()
-        sizer.Fit(self)
+
+        # Make hidden textbox for hint
+        self.hint_text = wx.TextCtrl(self)
+        self.GetSizer().Add(item=self.hint_text, flag=wx.EXPAND)
+        self.GetSizer().Hide(self.hint_text)
+
+        self.GetSizer().Fit(self)
+
         self.text.SetFocus()
         
+    # textbox method
+    def CreateTextCtrl(self):
+        text = wx.TextCtrl(self)
+        self.GetSizer().Add(item=text, flag=wx.EXPAND)
+        self.Bind(event=wx.EVT_TEXT, handler=self.Enter, source=text)
+        self.text = text
 
     # initialize all buttons, called once at beginning of script
     def CreateMenuButtons(self):
@@ -75,6 +89,7 @@ class WhosThatPokemon(wx.Frame):
         self.music_button = wx.Button(parent=self,label="Play Music")
         self.easy_button = wx.Button(parent=self,label="Easy Mode: OFF")
         next = wx.Button(parent=self,label="Next Pokemon")
+        self.hint_button = wx.Button(parent=self,label="Show Hint")
 
         gs.Add(item=self.timer_button, flag=wx.EXPAND)
         gs.Add(item=self.score_button, flag=wx.EXPAND)
@@ -85,6 +100,7 @@ class WhosThatPokemon(wx.Frame):
         gs.Add(item=self.music_button, flag=wx.EXPAND)
         gs.Add(item=self.easy_button, flag=wx.EXPAND)
         gs.Add(item=next, flag=wx.EXPAND)
+        gs.Add(item=self.hint_button, flag=wx.EXPAND)
         
         self.Bind(wx.EVT_TIMER, self.update_timer, self.Timer)
         self.Bind(event=wx.EVT_BUTTON, handler=self.unclickable_button, source=self.timer_button)
@@ -96,12 +112,24 @@ class WhosThatPokemon(wx.Frame):
         self.Bind(event=wx.EVT_BUTTON, handler=self.playFile, source=self.music_button)
         self.Bind(event=wx.EVT_BUTTON, handler=self.change_difficulty, source=self.easy_button)
         self.Bind(event=wx.EVT_BUTTON, handler=self.NextPokemon, source=next)
-
+        self.Bind(event=wx.EVT_BUTTON, handler=self.ShowHideHint, source=self.hint_button)
 
         self.GetSizer().Add(item=gs, flag=wx.EXPAND)
 
+    # method to bind to unclickable buttons to return focus to textbox
     def unclickable_button(self, event):
         self.text.SetFocus()
+
+    # method called everytime textbox text is edited
+    def Enter(self, event):
+        key = event.GetEventObject().GetValue()
+        if (self.curr != -2):
+            if(self.points == 0.0):
+                self.NextPokemon()
+            if(key.lower() == self.num2name[self.curr].lower() and not self.pause):
+                self.score += self.points
+                self.score_button.SetLabel("Score: " + str(self.score))
+                self.NextPokemon()
 
     # music button method
     def playFile(self,event):
@@ -122,23 +150,6 @@ class WhosThatPokemon(wx.Frame):
                 self.music_button.SetLabel("Pause Music")
         self.text.SetFocus()
 
-    # textbox method
-    def CreateTextCtrl(self):
-        text = wx.TextCtrl(self)
-        self.GetSizer().Add(item=text, flag=wx.EXPAND)
-        self.Bind(event=wx.EVT_TEXT, handler=self.Enter, source=text)
-        self.text = text   
-
-    # method called everytime textbox text is edited
-    def Enter(self, event):
-        key = event.GetEventObject().GetValue()
-        if (self.curr != -2):
-            if(self.points == 0.0):
-                self.NextPokemon()
-            if(key.lower() == self.num2name[self.curr].lower() and not self.pause):
-                self.score += self.points
-                self.score_button.SetLabel("Score: " + str(self.score))
-                self.NextPokemon()
     
     # pokemon picture change method
     def NextPokemon(self, event=[]):
@@ -150,7 +161,8 @@ class WhosThatPokemon(wx.Frame):
             keys_left = self.num2color.keys()
             if (len(keys_left) == 0):
                 self.curr = -2
-                self.back_panel.poke = wx.Bitmap('end.jpg')
+                self.back_panel.back = wx.Bitmap('end.jpg')
+                self.back_panel.poke = wx.Bitmap('transparent.png')
                 self.back_panel.Refresh()
                 self.text.Clear()
                 self.text.AppendText('Congratulations, you win!')
@@ -251,6 +263,19 @@ class WhosThatPokemon(wx.Frame):
         self.text.SetEditable(True)
         self.text.SetFocus()
 
+    def ShowHideHint(self, event):
+        self.hint = not self.hint
+
+        if (self.hint):
+            self.hint_button.SetLabel("Hide Hint")
+            self.GetSizer().Show(self.hint_text)
+            self.GetSizer().Fit(self)
+        else:
+            self.hint_button.SetLabel("Show Hint")
+            self.GetSizer().Hide(self.hint_text)
+            self.GetSizer().Fit(self)
+        
+        self.text.SetFocus()
 
 
 def main():
