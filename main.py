@@ -61,6 +61,48 @@ class WhosThatPokemon(wx.Frame):
         sizer.Fit(self)
         self.text.SetFocus()
         
+
+    # initialize all buttons, called once at beginning of script
+    def CreateMenuButtons(self):
+        gs = wx.GridSizer(5,2)
+
+        self.timer_button = wx.Button(parent=self, label='Time: ' + str(self.time))
+        self.score_button = wx.Button(parent=self, label='Score: ' + str(self.score))
+        self.points_button = wx.Button(parent=self, label='Points This Round: ' + str(self.points))
+        self.pause_button = wx.Button(parent=self, label='Pause')
+        quit = wx.Button(parent=self, label='Quit')
+        restart = wx.Button(parent=self, label='Restart')
+        self.music_button = wx.Button(parent=self,label="Play Music")
+        self.easy_button = wx.Button(parent=self,label="Easy Mode: OFF")
+        next = wx.Button(parent=self,label="Next Pokemon")
+
+        gs.Add(item=self.timer_button, flag=wx.EXPAND)
+        gs.Add(item=self.score_button, flag=wx.EXPAND)
+        gs.Add(item=self.points_button, flag=wx.EXPAND)
+        gs.Add(item=self.pause_button, flag=wx.EXPAND)
+        gs.Add(item=quit, flag=wx.EXPAND)
+        gs.Add(item=restart, flag=wx.EXPAND)
+        gs.Add(item=self.music_button, flag=wx.EXPAND)
+        gs.Add(item=self.easy_button, flag=wx.EXPAND)
+        gs.Add(item=next, flag=wx.EXPAND)
+        
+        self.Bind(wx.EVT_TIMER, self.update_timer, self.Timer)
+        self.Bind(event=wx.EVT_BUTTON, handler=self.unclickable_button, source=self.timer_button)
+        self.Bind(event=wx.EVT_BUTTON, handler=self.unclickable_button, source=self.score_button)
+        self.Bind(event=wx.EVT_BUTTON, handler=self.unclickable_button, source=self.points_button)
+        self.Bind(event=wx.EVT_BUTTON, handler=self.Pause, source=self.pause_button)
+        self.Bind(event=wx.EVT_BUTTON, handler=self.Quit, source=quit)
+        self.Bind(event=wx.EVT_BUTTON, handler=self.Restart, source=restart)
+        self.Bind(event=wx.EVT_BUTTON, handler=self.playFile, source=self.music_button)
+        self.Bind(event=wx.EVT_BUTTON, handler=self.change_difficulty, source=self.easy_button)
+        self.Bind(event=wx.EVT_BUTTON, handler=self.NextPokemon, source=next)
+
+
+        self.GetSizer().Add(item=gs, flag=wx.EXPAND)
+
+    def unclickable_button(self, event):
+        self.text.SetFocus()
+
     # music button method
     def playFile(self,event):
         if (not self.pause):
@@ -99,7 +141,7 @@ class WhosThatPokemon(wx.Frame):
                 self.NextPokemon()
     
     # pokemon picture change method
-    def NextPokemon(self):
+    def NextPokemon(self, event=[]):
             # delete the current pokemon from both sets of pokemon
             if (self.curr >= 0):
                 del self.num2color[self.curr]
@@ -123,39 +165,10 @@ class WhosThatPokemon(wx.Frame):
                 self.back_panel.poke = wx.Bitmap('black/' + self.num2black[self.curr])
 
             self.points = 10
+            self.points_button.SetLabel("Points This Round: " + str(self.points))
             self.back_panel.Refresh()
             self.text.Clear()
-
-    # initialize all buttons, called once at beginning of script
-    def CreateMenuButtons(self):
-        gs = wx.GridSizer(4,2)
-
-        self.timer_button = wx.Button(parent=self, label='Time: ' + str(self.time))
-        self.pause_button = wx.Button(parent=self, label='Pause')
-        self.score_button = wx.Button(parent=self, label='Score: ' + str(self.score))
-        self.points_button = wx.Button(parent=self, label='Points: ' + str(self.points))
-        quit = wx.Button(parent=self, label='Quit')
-        restart = wx.Button(parent=self, label='Restart')
-        self.music_button = wx.Button(parent=self,label="Play Music")
-        self.easy_button = wx.Button(parent=self,label="Easy Mode: OFF")
-
-        gs.Add(item=self.timer_button, flag=wx.EXPAND)
-        gs.Add(item=self.pause_button, flag=wx.EXPAND)
-        gs.Add(item=self.score_button, flag=wx.EXPAND)
-        gs.Add(item=self.points_button, flag=wx.EXPAND)
-        gs.Add(item=quit, flag=wx.EXPAND)
-        gs.Add(item=restart, flag=wx.EXPAND)
-        gs.Add(item=self.music_button, flag=wx.EXPAND)
-        gs.Add(item=self.easy_button, flag=wx.EXPAND)
-        
-        self.Bind(wx.EVT_TIMER, self.update_timer, self.Timer)
-        self.Bind(event=wx.EVT_BUTTON, handler=self.Pause, source=self.pause_button)
-        self.Bind(event=wx.EVT_BUTTON, handler=self.Restart, source=restart)
-        self.Bind(event=wx.EVT_BUTTON, handler=self.Quit, source=quit)
-        self.Bind(event=wx.EVT_BUTTON, handler=self.playFile, source=self.music_button)
-        self.Bind(event=wx.EVT_BUTTON, handler=self.change_difficulty, source=self.easy_button)
-
-        self.GetSizer().Add(item=gs, flag=wx.EXPAND)
+            self.text.SetFocus()
 
     # called when the easy button is pressed. changes difficulty
     def change_difficulty(self, event):
@@ -184,7 +197,7 @@ class WhosThatPokemon(wx.Frame):
             if (self.points > 0):
                 self.points -= 0.5
         self.timer_button.SetLabel("Time: " + str(self.time))
-        self.points_button.SetLabel("Points: " + str(self.points))
+        self.points_button.SetLabel("Points This Round: " + str(self.points))
         if(self.points == 0): 
             self.NextPokemon()
         
@@ -231,7 +244,7 @@ class WhosThatPokemon(wx.Frame):
 
         self.time = 0
         self.score = 0
-        self.points_button.SetLabel("Points: " + str(self.points))
+        self.points_button.SetLabel("Points This Round: " + str(self.points))
         self.score_button.SetLabel("Score: " + str(self.score))
         self.timer_button.SetLabel("Time: " + str(self.time))
 
