@@ -15,7 +15,7 @@ class WhosThatPokemon(wx.Frame):
         wx.Frame.__init__(self, *args, **keywords)
 
         # useful for testing
-        only_one_pokemon = False
+        only_one_pokemon = True
 
         # intro sound clip
         pygame.mixer.init()
@@ -50,6 +50,7 @@ class WhosThatPokemon(wx.Frame):
         self.music = "off" # 4 values: off, playing, paused, paused_duetogame
         self.easy = False
         self.hint = False
+        self.end = False
 
 
         # create background image and first pokemon, without returning error
@@ -162,6 +163,10 @@ class WhosThatPokemon(wx.Frame):
     
     # pokemon picture change method
     def NextPokemon(self, event=[]):
+            # make sure thef can't press this after game has ended
+            if (self.end):
+                return
+
             # delete the current pokemon from both sets of pokemon
             if (self.curr >= 0):
                 del self.num2color[self.curr]
@@ -176,6 +181,7 @@ class WhosThatPokemon(wx.Frame):
             # what happens when you win the game!
             if (len(keys_left) == 0):
                 self.Pause()
+                self.end = True
                 self.curr = -2
                 self.back_panel.back = wx.Bitmap('end.jpg')
                 self.back_panel.poke = wx.Bitmap('transparent.png')
@@ -217,6 +223,10 @@ class WhosThatPokemon(wx.Frame):
 
     # called when the easy button is pressed. toggles picture shadow
     def change_difficulty(self, event):
+        # make sure thef can't press this after game has ended
+        if (self.end):
+            return
+
         self.easy = not self.easy
         if (self.easy):
             self.easy_button.SetLabel('Easy Mode: ON')
@@ -244,9 +254,7 @@ class WhosThatPokemon(wx.Frame):
                 t = self.time-self.hint_time
                 if ( t % 2 == 0 and \
                     t / 2 < len(self.num2name[self.curr])):
-                    #self.hint_text.SetEditable(True)
                     self.hint_text.AppendText(self.num2name[self.curr][t/2])
-                    #self.hint_text.SetEditable(False)
 
             self.time += 1
 
@@ -260,6 +268,10 @@ class WhosThatPokemon(wx.Frame):
         
     # pause button method
     def Pause(self, event=[]):
+        # make sure thef can't press this after game has ended
+        if (self.end):
+            return
+
         self.pause = not (self.pause)
 
         if self.pause:
@@ -323,6 +335,12 @@ class WhosThatPokemon(wx.Frame):
         self.score_button.SetLabel("Score: " + str(self.score))
         self.timer_button.SetLabel("Time: " + str(self.time))
         self.hint_text.Clear()
+        self.end = False
+
+        # intro sound clip
+        pygame.mixer.init()
+        pygame.mixer.music.load('Music/poke-who.wav')
+        pygame.mixer.music.play()
 
         self.text.Clear()
         self.text.SetEditable(True)
@@ -330,6 +348,10 @@ class WhosThatPokemon(wx.Frame):
 
     # turns off and on the hint
     def ShowHideHint(self, event=[]):
+        # make sure thef can't press this after game has ended
+        if (self.end):
+            return
+
         self.hint = not self.hint
 
         if (self.hint):
