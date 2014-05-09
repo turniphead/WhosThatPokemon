@@ -20,9 +20,9 @@ class WhosThatPokemon(wx.Frame):
         fi.close()
         #wx.MessageBox(instr, 'Instructions', wx.OK | wx.ICON_INFORMATION)
         
-        m = wx.MessageDialog(self,instr,'Instructions',  wx.OK | wx.ICON_INFORMATION)
-        m.ShowModal()
-        m.Destroy()
+        #m = wx.MessageDialog(self,instr,'Instructions',  wx.OK | wx.ICON_INFORMATION)
+        #m.ShowModal()
+        #m.Destroy()
 
         only_one_pokemon = False
 

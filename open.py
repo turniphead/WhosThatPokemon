@@ -1,5 +1,5 @@
 import wx
-import os
+from main import *
 
 class Instructions(wx.Frame):
 	def __init__(self, *args, **keywords):
@@ -13,8 +13,7 @@ class Instructions(wx.Frame):
 		self.MakeButton()
 
 	def MakeText(self):
-		self.text = wx.TextCtrl(self, value=self.instr)
-		self.text.SetEditable(False)
+		self.text = wx.TextCtrl(self, value=self.instr, style = wx.TE_MULTILINE|wx.TE_READONLY|wx.EXPAND, size=(500,250))
 		self.GetSizer().Add(item=self.text, flag=wx.EXPAND)
 
 	def MakeButton(self):
@@ -24,17 +23,16 @@ class Instructions(wx.Frame):
 
 	def GoToGame(self,event):
 		self.Destroy()
-		os.system('python main.py')
-		#run main.py
-		#frame = WhosThatPokemon(parent=None, id=wx.ID_ANY, title="Who's That Pokemon?")
-	    #frame.Show(True)
-	    #frame.Center()
-	    #frame.SetFocus()
-	    #frame.text.SetFocus()
+		#os.system('python main.py')
+		frame = WhosThatPokemon(parent=None, id=wx.ID_ANY, title="Who's That Pokemon?")
+		frame.Show(True)
+		frame.Center()
+		frame.SetFocus()
+		frame.text.SetFocus()
 
 def main():
     app = wx.App()
-    frame1 = Instructions(parent=None, id=wx.ID_ANY, title="Who's That Pokemon?")
+    frame1 = Instructions(parent=None, id=wx.ID_ANY, title="Who's That Pokemon?", size = (500,315))
     frame1.Show(True)
     frame1.Center()
     frame1.SetFocus()
