@@ -1,9 +1,26 @@
-Requires pygame, so follow instructions @ 
-http://coding2learn.org/blog/2014/03/11/installing-pygame-on-mac-os-x-with-python-3/
+Requires pygame, so download from:
+http://www.pygame.org/download.shtml
+
+Requires wxpython:
+http://www.wxpython.org/download.php
+
+
+TO RUN:
+run the file open.py
+
+
+Files and what they do:
+open.py - displays the opening picuter and choice buttons
+game.py - runs the logic of the game, including the wxpython graphics
+background_panel.py - Panel class that makes the pokemon display over the background image correctly
+high_score.txt - stores the current high score
+Names.txt - provides the base for the dictionaries that we make in the game
 
 
 
-#done by Dean:
+
+Cool Items to Note:
+
 music button
 	plays / pauses music
 	alternating effect of button label
@@ -33,5 +50,6 @@ hint button
 intro sound
 	plays the classic "Who's That Pokemon?!" sound clip
 	classic
-Popup instructions
-	made a popup with instructions before the game begins
+Intro Screen
+	Fun picture screen to preface the game
+	Buttons do things
