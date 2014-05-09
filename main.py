@@ -24,7 +24,7 @@ class WhosThatPokemon(wx.Frame):
         #m.ShowModal()
         #m.Destroy()
 
-        only_one_pokemon = True
+        only_one_pokemon = False
 
         pygame.mixer.init()
         pygame.mixer.music.load('Music/poke-who.wav')
