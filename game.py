@@ -15,7 +15,7 @@ class WhosThatPokemon(wx.Frame):
         wx.Frame.__init__(self, *args, **keywords)
 
         # useful for testing
-        only_one_pokemon = False
+        only_one_pokemon = True
 
         # intro sound clip
         pygame.mixer.init()
@@ -181,7 +181,6 @@ class WhosThatPokemon(wx.Frame):
             # what happens when you win the game!
             if (len(keys_left) == 0):
                 self.Pause()
-                self.end = True
                 self.curr = -2
                 self.back_panel.back = wx.Bitmap('end.jpg')
                 self.back_panel.poke = wx.Bitmap('transparent.png')
@@ -191,6 +190,7 @@ class WhosThatPokemon(wx.Frame):
                 self.text.SetEditable(False)
                 self.points = 10
                 self.points_button.SetLabel("Points This Round: " + str(self.points))
+                self.end = True
 
                 # high score grabbing and checking
                 h = open('high_score.txt','r')
@@ -295,6 +295,7 @@ class WhosThatPokemon(wx.Frame):
 
     # restart method, called on restart button click
     def Restart(self, event):
+        self.end = False
         # reset pokemon lists
         self.num2name = {}
         self.num2color = {}
@@ -335,7 +336,6 @@ class WhosThatPokemon(wx.Frame):
         self.score_button.SetLabel("Score: " + str(self.score))
         self.timer_button.SetLabel("Time: " + str(self.time))
         self.hint_text.Clear()
-        self.end = False
 
         # intro sound clip
         pygame.mixer.init()
