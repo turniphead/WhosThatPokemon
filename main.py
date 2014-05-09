@@ -231,9 +231,9 @@ class WhosThatPokemon(wx.Frame):
                 t = self.time-self.hint_time
                 if ( t % 2 == 0 and \
                     t / 2 < len(self.num2name[self.curr])):
-                    self.hint_text.SetEditable(True)
+                    #self.hint_text.SetEditable(True)
                     self.hint_text.AppendText(self.num2name[self.curr][t/2])
-                    self.hint_text.SetEditable(False)
+                    #self.hint_text.SetEditable(False)
 
             self.time += 1
 
@@ -315,7 +315,7 @@ class WhosThatPokemon(wx.Frame):
         if (self.hint):
             self.hint_button.SetLabel("Hide Hint")
             self.hint_text.Clear()
-            self.hint_text.WriteText("Hint: ")
+            self.hint_text.AppendText("Hint: ")
             #self.GetSizer().Show(self.hint_text)
             #self.GetSizer().Fit(self)
 
