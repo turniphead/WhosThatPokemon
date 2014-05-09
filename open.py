@@ -1,5 +1,6 @@
 ''' The introduction screen that allows the user to either start the game or quit. '''
 import wx
+import pygame
 import game
 
 class Instructions(wx.Frame):
@@ -15,6 +16,9 @@ class Instructions(wx.Frame):
         sizer.Add(item=Background, flag=wx.EXPAND)
         self.MakeButtons()
         sizer.Fit(self)
+        pygame.mixer.init()
+        pygame.mixer.music.load('Music/intro.wav')
+        pygame.mixer.music.play()
 
     def MakeButtons(self):
         #Create grid sizer for buttons
