@@ -75,9 +75,8 @@ class WhosThatPokemon(wx.Frame):
         # Make hidden textbox for hint
         self.hint_text = wx.TextCtrl(self)
         self.hint_text.SetEditable(False)
-        self.hint_text.WriteText("Hint: ")
         self.GetSizer().Add(item=self.hint_text, flag=wx.EXPAND)
-        self.GetSizer().Hide(self.hint_text)
+        #self.GetSizer().Hide(self.hint_text)
 
         self.GetSizer().Fit(self)
 
@@ -317,21 +316,22 @@ class WhosThatPokemon(wx.Frame):
             self.hint_button.SetLabel("Hide Hint")
             self.hint_text.Clear()
             self.hint_text.WriteText("Hint: ")
-            self.GetSizer().Show(self.hint_text)
-            self.GetSizer().Fit(self)
+            #self.GetSizer().Show(self.hint_text)
+            #self.GetSizer().Fit(self)
 
             self.hint_time = self.time
         else:
             self.hint_button.SetLabel("Show Hint")
-            self.GetSizer().Hide(self.hint_text)
-            self.GetSizer().Fit(self)
+            self.hint_text.Clear()
+            #self.GetSizer().Hide(self.hint_text)
+            #self.GetSizer().Fit(self)
 
         self.text.SetFocus()
 
 
 def main():
     app = wx.App()
-    frame = WhosThatPokemon(parent=None, id=wx.ID_ANY, title='Who Is That Pokemon?')
+    frame = WhosThatPokemon(parent=None, id=wx.ID_ANY, title="Who's That Pokemon?")
     frame.Show(True)
     frame.Center()
     frame.SetFocus()
