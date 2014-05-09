@@ -332,6 +332,7 @@ class WhosThatPokemon(wx.Frame):
         # reset game values
         self.time = 0
         self.score = 0
+        self.points = 10
         self.points_button.SetLabel("Points This Round: " + str(self.points))
         self.score_button.SetLabel("Score: " + str(self.score))
         self.timer_button.SetLabel("Time: " + str(self.time))
