@@ -18,8 +18,11 @@ class WhosThatPokemon(wx.Frame):
         fi = open('instructions.txt','r')
         instr = fi.read()
         fi.close()
-        wx.MessageBox(instr, 'Instructions', 
-            wx.OK | wx.ICON_INFORMATION)
+        #wx.MessageBox(instr, 'Instructions', wx.OK | wx.ICON_INFORMATION)
+        
+        m = wx.MessageDialog(self,instr,'Instructions',  wx.OK | wx.ICON_INFORMATION)
+        m.ShowModal()
+        m.Destroy()
 
         only_one_pokemon = False
 
