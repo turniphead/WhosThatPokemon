@@ -15,7 +15,7 @@ class WhosThatPokemon(wx.Frame):
         wx.Frame.__init__(self, *args, **keywords)
 
         # useful for testing
-        only_one_pokemon = True
+        only_one_pokemon = False
 
         # intro sound clip
         pygame.mixer.init()
