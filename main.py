@@ -14,24 +14,16 @@ class WhosThatPokemon(wx.Frame):
 
         wx.Frame.__init__(self, *args, **keywords)
 
-
-        fi = open('instructions.txt','r')
-        instr = fi.read()
-        fi.close()
-        #wx.MessageBox(instr, 'Instructions', wx.OK | wx.ICON_INFORMATION)
-        
-        #m = wx.MessageDialog(self,instr,'Instructions',  wx.OK | wx.ICON_INFORMATION)
-        #m.ShowModal()
-        #m.Destroy()
-
+        # useful for testing
         only_one_pokemon = False
 
+        # intro sound clip
         pygame.mixer.init()
         pygame.mixer.music.load('Music/poke-who.wav')
         pygame.mixer.music.play()
 
     
-        #Create pointers to pokemon pics
+        # Create dictionaries of pokedex-number to name/filename
         self.num2name = {}
         self.num2color = {}
         self.num2black = {}
@@ -44,21 +36,23 @@ class WhosThatPokemon(wx.Frame):
                 self.num2black[int(split[0])] = line+'-s.png'
         f.close()
 
-        self.curr = random.randint(1,151)  #sometimes -1 or -2
-
+        # choose the first pokemon
+        self.curr = random.randint(1,151)
         if (only_one_pokemon):
             self.curr = 1
+
+
         #Initialize game values
         self.score = 0
         self.time = 0
         self.points = 10
         self.pause = False
-        self.music = "off" # has 4 values: off, playing, paused, paused_duetogame
+        self.music = "off" # 4 values: off, playing, paused, paused_duetogame
         self.easy = False
         self.hint = False
 
 
-        #create background image and first pokemon, without returning error
+        # create background image and first pokemon, without returning error
         no_log = wx.LogNull()
         self.back_panel = BackPanel(self,'black/' + self.num2black[self.curr])
         del no_log
@@ -67,7 +61,7 @@ class WhosThatPokemon(wx.Frame):
         self.SetSizer(sizer)
         self.GetSizer().Add(item=self.back_panel)
         
-        #Create timer, start
+        #Create timer, start timer
         self.Timer = wx.Timer(self)
         self.Timer.Start(1000)
 
@@ -75,17 +69,16 @@ class WhosThatPokemon(wx.Frame):
         self.CreateTextCtrl()
         self.CreateMenuButtons()
 
-        # Make hidden textbox for hint
+        # make uneditabe textbox for hint
         self.hint_text = wx.TextCtrl(self)
         self.hint_text.SetEditable(False)
         self.GetSizer().Add(item=self.hint_text, flag=wx.EXPAND)
-        #self.GetSizer().Hide(self.hint_text)
 
+        # fit sizer, set focus to typing box
         self.GetSizer().Fit(self)
-
         self.text.SetFocus()
         
-    # textbox method
+    # method that creates the main textbox
     def CreateTextCtrl(self):
         text = wx.TextCtrl(self)
         self.GetSizer().Add(item=text, flag=wx.EXPAND)
@@ -98,7 +91,8 @@ class WhosThatPokemon(wx.Frame):
 
         self.timer_button = wx.Button(parent=self, label='Time: ' + str(self.time))
         self.score_button = wx.Button(parent=self, label='Score: ' + str(self.score))
-        self.points_button = wx.Button(parent=self, label='Points This Round: ' + str(self.points))
+        self.points_button = wx.Button(parent=self, \
+            label='Points This Round: ' + str(self.points))
         self.pause_button = wx.Button(parent=self, label='Pause')
         quit = wx.Button(parent=self, label='Quit')
         restart = wx.Button(parent=self, label='Restart')
@@ -173,10 +167,13 @@ class WhosThatPokemon(wx.Frame):
                 del self.num2color[self.curr]
                 del self.num2black[self.curr]
 
+            # turns off the hint if it is on
             if(self.hint):
                 self.ShowHideHint()
 
             keys_left = self.num2color.keys()
+
+            # what happens when you win the game!
             if (len(keys_left) == 0):
                 self.Pause()
                 self.curr = -2
@@ -189,10 +186,11 @@ class WhosThatPokemon(wx.Frame):
                 self.points = 10
                 self.points_button.SetLabel("Points This Round: " + str(self.points))
 
-                #high score grabbing
+                # high score grabbing and checking
                 h = open('high_score.txt','r')
                 high_score = float(h.read())
                 h.close()
+                # sets the new high score and displays message if better
                 if (self.score > high_score):
                     h = open('high_score.txt','w')
                     h.write(str(self.score))
@@ -201,6 +199,7 @@ class WhosThatPokemon(wx.Frame):
                 self.hint_text.AppendText("Your Score: " + str(self.score) + "\tHigh Score: " + str(high_score))
                 return
 
+            # draws a new pokemon from the remaining list of pokemon not solved
             self.curr = keys_left[ random.randint(0,len(keys_left)-1) ]
 
             if(self.easy):
@@ -216,7 +215,7 @@ class WhosThatPokemon(wx.Frame):
             self.text.Clear()
             self.text.SetFocus()
 
-    # called when the easy button is pressed. changes difficulty
+    # called when the easy button is pressed. toggles picture shadow
     def change_difficulty(self, event):
         self.easy = not self.easy
         if (self.easy):
@@ -282,7 +281,7 @@ class WhosThatPokemon(wx.Frame):
                 self.music = "playing"
         self.text.SetFocus()
 
-
+    # restart method, called on restart button click
     def Restart(self, event):
         # reset pokemon lists
         self.num2name = {}
@@ -296,8 +295,10 @@ class WhosThatPokemon(wx.Frame):
             self.num2black[int(split[0])] = line+'-s.png'
         f.close()
 
+        # choose new pokemon
         self.curr = random.randint(1,151)
 
+        # reset back panel and pokemon image
         no_log = wx.LogNull()
         self.back_panel.back = wx.Bitmap("background_img.png")
         if(self.easy):
@@ -307,12 +308,15 @@ class WhosThatPokemon(wx.Frame):
         self.back_panel.Refresh()
         del no_log
 
+        # unpauses the game if paused
         if (self.pause):
             self.Pause()
 
+        # turns off hint if hint is on
         if (self.hint):
             self.ShowHideHint()
 
+        # reset game values
         self.time = 0
         self.score = 0
         self.points_button.SetLabel("Points This Round: " + str(self.points))
@@ -323,6 +327,7 @@ class WhosThatPokemon(wx.Frame):
         self.text.SetEditable(True)
         self.text.SetFocus()
 
+    # turns off and on the hint
     def ShowHideHint(self, event=[]):
         self.hint = not self.hint
 
@@ -330,15 +335,10 @@ class WhosThatPokemon(wx.Frame):
             self.hint_button.SetLabel("Hide Hint")
             self.hint_text.Clear()
             self.hint_text.AppendText("Hint: ")
-            #self.GetSizer().Show(self.hint_text)
-            #self.GetSizer().Fit(self)
-
             self.hint_time = self.time
         else:
             self.hint_button.SetLabel("Show Hint")
             self.hint_text.Clear()
-            #self.GetSizer().Hide(self.hint_text)
-            #self.GetSizer().Fit(self)
 
         self.text.SetFocus()
 
