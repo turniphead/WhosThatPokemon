@@ -17,6 +17,15 @@ high_score.txt - stores the current high score
 Names.txt - provides the base for the dictionaries that we make in the game
 
 
+
+************************************************************
+Testing EndGame Behavior:
+If you want a quick way to get to the end of the game, go to game.py and change the
+only_one_pokemon variable to be True (top of the file). This will make the game so that
+Bulbasaur is the only pokemon you have to guess.
+************************************************************
+
+
 Cool Items to Note:
 
 open.py:
