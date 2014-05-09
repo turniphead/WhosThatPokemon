@@ -3,9 +3,12 @@ import wx
 class BackPanel(wx.Panel):
 
     def __init__(self, parent, poke_img_name):
+
+        # creates a panel the right size
         wx.Panel.__init__(self, parent, size = (454, 340) )
         self.Bind(wx.EVT_PAINT, self.OnPaint)
 
+        # sets right variable
         self.back = wx.Bitmap("background_img.png", wx.BITMAP_TYPE_PNG)
         self.poke = wx.Bitmap(poke_img_name)
 
