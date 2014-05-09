@@ -344,13 +344,11 @@ class WhosThatPokemon(wx.Frame):
 
 
 def main():
-    app = wx.App()
     frame = WhosThatPokemon(parent=None, id=wx.ID_ANY, title="Who's That Pokemon?")
     frame.Show(True)
     frame.Center()
     frame.SetFocus()
     frame.text.SetFocus()
-    app.MainLoop()
 
 
 if __name__ == "__main__":
