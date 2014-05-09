@@ -24,7 +24,7 @@ class WhosThatPokemon(wx.Frame):
         #m.ShowModal()
         #m.Destroy()
 
-        only_one_pokemon = False
+        only_one_pokemon = True
 
         pygame.mixer.init()
         pygame.mixer.music.load('Music/poke-who.wav')
@@ -188,6 +188,17 @@ class WhosThatPokemon(wx.Frame):
                 self.text.SetEditable(False)
                 self.points = 10
                 self.points_button.SetLabel("Points This Round: " + str(self.points))
+
+                #high score grabbing
+                h = open('high_score.txt','r')
+                high_score = float(h.read())
+                h.close()
+                if (self.score > high_score):
+                    h = open('high_score.txt','w')
+                    h.write(str(self.score))
+                    h.close()
+                    high_score = str(self.score)+"\tNEW HIGH SCORE!"
+                self.hint_text.AppendText("Your Score: " + str(self.score) + "\tHigh Score: " + str(high_score))
                 return
 
             self.curr = keys_left[ random.randint(0,len(keys_left)-1) ]
