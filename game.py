@@ -343,6 +343,9 @@ class WhosThatPokemon(wx.Frame):
         pygame.mixer.music.load('Music/poke-who.wav')
         pygame.mixer.music.play()
 
+        self.music = "off"
+        self.music_button.SetLabel("Play Music")
+
         self.text.Clear()
         self.text.SetEditable(True)
         self.text.SetFocus()
