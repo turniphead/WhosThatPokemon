@@ -15,7 +15,7 @@ class WhosThatPokemon(wx.Frame):
         wx.Frame.__init__(self, *args, **keywords)
 
         # useful for testing
-        only_one_pokemon = False
+        only_one_pokemon = True
 
         # intro sound clip
         pygame.mixer.init()
@@ -322,6 +322,7 @@ class WhosThatPokemon(wx.Frame):
         self.points_button.SetLabel("Points This Round: " + str(self.points))
         self.score_button.SetLabel("Score: " + str(self.score))
         self.timer_button.SetLabel("Time: " + str(self.time))
+        self.hint_text.Clear()
 
         self.text.Clear()
         self.text.SetEditable(True)
