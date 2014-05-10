@@ -163,7 +163,7 @@ class WhosThatPokemon(wx.Frame):
     
     # pokemon picture change method
     def NextPokemon(self, event=[]):
-            # make sure thef can't press this after game has ended
+            # make sure they can't press this after game has ended
             if (self.end):
                 return
 
