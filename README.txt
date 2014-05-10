@@ -1,3 +1,6 @@
+Who's That Pokemon?
+A quiz game by Christopher Akatsuka and Dean Wilhelmi
+
 Requires pygame, so download from:
 http://www.pygame.org/download.shtml
 
